@@ -15,7 +15,7 @@ V_DEVICE="iPhone"
 V_DIR="./succa_installer_files"
 V_LOGIN="root"                   
 V_MNT=mnt/android
-V_IDROID_ZIMAGE_URL="http://idroid.nickpack.com/kernel/zImage-3G/bluerise.8d956f1.nickpack.zip" #"http://noltari.googlecode.com/svn/trunk/idroid/zImage.zip"
+V_IDROID_ZIMAGE_URL="http://idroid.nickpack.com/kernel/zImage-3G/7ceb450.nickpack.zip" #"http://idroid.nickpack.com/kernel/zImage-3G/bluerise.8d956f1.nickpack.zip"
 V_IDROID_IMAGE_URL="http://dl.dropbox.com/u/1927334/idroid-0.1b_rooted_with_sd_emulation_and_dnsfix.zip"
 V_MARVELL_DRIVER="http://extranet.marvell.com/drivers/files/SD-8686-LINUX26-SYSKT-9.70.3.p24-26409.P45-GPL.zip"
 
