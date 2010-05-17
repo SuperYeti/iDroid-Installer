@@ -9,6 +9,7 @@ echo -e "\nOpen this file, change ip and root password, then remove this line ;)
 #
 # DO NOT EDIT BELOW UNLESS YOU ARE KNOWING WHAT ARE YOU DOING
 #
+sudo -s
 V_VERSION=2010051600
 V_WIFI_DRIVER=8
 V_DEVICE="iPhone"
@@ -22,7 +23,8 @@ V_MARVELL_DRIVER="http://extranet.marvell.com/drivers/files/SD-8686-LINUX26-SYSK
 V_SD8686_V8="http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=libertas/sd8686_v8.bin;hb=HEAD"
 V_SD8686_V8_HELPER="http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=libertas/sd8686_v8_helper.bin;hb=HEAD"
 V_IDROID_CALLSUPPORT_SO="http://github.com/SuperYeti/iDroid-Installer/raw/master/compiled/libreference-ril.so"
-
+V_ALSA_CONF="http://github.com/planetbeing/vendor_apple/raw/donut-iphone/3g-asound.conf"
+V_ALSA_STATE="http://github.com/planetbeing/vendor_apple/raw/donut-iphone/3g-asound.state"
 isDebian() {
 
   if [ -f "/etc/debian_version" ]
@@ -332,12 +334,17 @@ get_android_image() {
 	
 	FILE="/var/root/Library/Lockdown/activation_records/wildcard_record.plist"
 	echo -e "\nExtracting Activation Token from $V_DEVICE... \c"
-	sshpass -p $V_PASS scp -C $V_LOGIN@$V_IP:$FILE .
+	sshpass -p $V_PASS scp -C $V_LOGIN@$V_IP:$FILE
+	ERR=$?
+	err_check
+
+	echo -e "\nGetting asound.conf... \c"
+	wget -q $V_ALSA_CONF -O asound.conf
 	ERR=$?
 	err_check
 	
-	echo -e "\nUnpacking patched zImage... \c"
-	unzip zImage.zip > /dev/null
+	echo -e "\nGetting asound.state... \c"
+	wget -q $V_ALSA_STATE -O asound.state
 	ERR=$?
 	err_check
 
@@ -406,6 +413,14 @@ patch_system_image() {
 	
 	echo -e "\nInjecting Activation Token from device... \c"
 	sudo cp wildcard_record.plist $V_MNT/lib/
+	ERR=$?
+	err_check
+	
+	echo -e "\nInjecting Audio Drivers... \c"
+	sudo cp asound.conf $V_MNT/etc/
+	ERR=$?
+	err_check
+	sudo cp asound.state $V_MNT/etc/
 	ERR=$?
 	err_check
 	
