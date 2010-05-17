@@ -9,7 +9,6 @@ echo -e "\nOpen this file, change ip and root password, then remove this line ;)
 #
 # DO NOT EDIT BELOW UNLESS YOU ARE KNOWING WHAT ARE YOU DOING
 #
-sudo -s
 V_VERSION=2010051600
 V_WIFI_DRIVER=8
 V_DEVICE="iPhone"
@@ -327,6 +326,12 @@ get_android_image() {
 	ERR=$?
 	err_check
 	
+	echo -e "\nUnpacking patched zImage... \c"
+	unzip zImage.zip > /dev/null
+	ERR=$?
+	err_check
+
+	
 	echo -e "\nGetting patched libreference-ril.so... \c"
 	wget -q $V_IDROID_CALLSUPPORT_SO -O libreference-ril.so
 	ERR=$?
@@ -334,7 +339,7 @@ get_android_image() {
 	
 	FILE="/var/root/Library/Lockdown/activation_records/wildcard_record.plist"
 	echo -e "\nExtracting Activation Token from $V_DEVICE... \c"
-	sshpass -p $V_PASS scp -C $V_LOGIN@$V_IP:$FILE
+	sshpass -p $V_PASS scp -C $V_LOGIN@$V_IP:$FILE .
 	ERR=$?
 	err_check
 
@@ -353,8 +358,6 @@ get_android_image() {
 	ERR=$?
 	err_check
 
-	#echo -e "\nUnpacking patched zImage... \c"
-	#tar -zxvf zImage.tar.gz -C idroid01b/idroid-0.1b_rooted_with_sd_emulation/var > /dev/null
 	echo -e "\nCopying zImage... \c"
 	cp zImage idroid01b/idroid-0.1b_rooted_with_sd_emulation/var
 	ERR=$?
